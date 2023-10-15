@@ -6,8 +6,10 @@ const accuracyDisplay = document.getElementById("accuracy");
 
 let timer;
 let startTime;
+let currentPosition = 0;
+const timeLimit = 10;
 
-// List of quotes for the typing test
+
 const quotes = [
     "The only way to do great work is to love what you do.",
     "In three words I can sum up everything I've learned about life: it goes on.",
@@ -22,38 +24,57 @@ const quotes = [
     "The best time to plant a tree was 20 years ago. The second best time is now.",
     "If you want to fly, you have to give up the things that weigh you down.",
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-    // Add more quotes here
+
 ];
 
-// Select a random quote for the test
+// To select a a random quotes
 const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
 quote.textContent = randomQuote;
 
 input.addEventListener("input", startTimer);
 
-function startTimer() {
+function initializeQuote () {
+    quote.innerHTML = randomQuote.split('').map(char => `<span>${char}</span>`).join('');
+}
+// Starting the timer
+function startTimer () {
     if (!timer) {
         timer = setInterval(updateTimer, 1000);
         startTime = Date.now();
     }
 
-    const typedText = input.value;
-    const words = typedText.trim().split(/\s+/).length;
+    
+}
+function updateTimer () {
     const elapsedTime = (Date.now() - startTime) / 1000;
-    const speed = Math.round((words / elapsedTime) * 60);
-    const accuracy = calculateAccuracy(randomQuote, typedText);
+    const typedText = input.value;
+    const speed = calculateSpeed(typedText, elapsedTime);
+    const accuracy = calculateAccuracy(quote.textContent, typedText);
 
     timeDisplay.textContent = `${elapsedTime.toFixed(1)}s`;
     speedDisplay.textContent = `${speed} WPM`;
     accuracyDisplay.textContent = `${accuracy}%`;
+    highlightCurrentCharacter(typedText);
 
-    if (typedText === randomQuote) {
+// By quote 
+    // if (typedText === quote.textContent) {
+    //     clearInterval(timer);
+    //     timer = null;
+    // }
+
+    // By specific time
+    if (elapsedTime >= timeLimit) {
         clearInterval(timer);
         timer = null;
+        input.setAttribute("disabled", "disabled");
     }
 }
+function calculateSpeed (typedText, elapsedTime){
+    const words = typedText.trim().split(/\s+/).length;
+    return Math.round((words / elapsedTime) * 60);
+}
 
-function calculateAccuracy(original, typed) {
+function calculateAccuracy (original, typed) {
     const minLength = Math.min(original.length, typed.length);
     let correct = 0;
     for (let i = 0; i < minLength; i++) {
@@ -63,3 +84,25 @@ function calculateAccuracy(original, typed) {
     }
     return ((correct / original.length) * 100).toFixed(2);
 }
+// Not working yet
+function highlightCurrentCharacter (typedText) {
+    const quoteChars = quote.querySelectorAll('span');
+
+    quoteChars.forEach((char, index) => {
+        if (index < typedText.length) {
+            if (typedText[index] === char.textContent) {
+                char.classList.add('correct');
+            } else {
+                char.classList.add('error');
+            }
+        } else {
+            char.classList.remove('correct', 'error');
+        }
+    });
+
+    currentPosition = typedText.length;
+}
+
+input.addEventListener("input", startTimer);
+
+initializeQuote();
