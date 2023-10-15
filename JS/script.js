@@ -1,0 +1,65 @@
+const quote = document.getElementById("quote");
+const input = document.getElementById("input");
+const timeDisplay = document.getElementById("time");
+const speedDisplay = document.getElementById("speed");
+const accuracyDisplay = document.getElementById("accuracy");
+
+let timer;
+let startTime;
+
+// List of quotes for the typing test
+const quotes = [
+    "The only way to do great work is to love what you do.",
+    "In three words I can sum up everything I've learned about life: it goes on.",
+    "Don't watch the clock; do what it does. Keep going.",
+    "The journey of a thousand miles begins with one step.",
+    "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+    "Life is what happens when you're busy making other plans.",
+    "It does not matter how slowly you go as long as you do not stop.",
+    "The future belongs to those who believe in the beauty of their dreams.",
+    "You miss 100% of the shots you don't take.",
+    "The only limit to our realization of tomorrow will be our doubts of today.",
+    "The best time to plant a tree was 20 years ago. The second best time is now.",
+    "If you want to fly, you have to give up the things that weigh you down.",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+    // Add more quotes here
+];
+
+// Select a random quote for the test
+const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+quote.textContent = randomQuote;
+
+input.addEventListener("input", startTimer);
+
+function startTimer() {
+    if (!timer) {
+        timer = setInterval(updateTimer, 1000);
+        startTime = Date.now();
+    }
+
+    const typedText = input.value;
+    const words = typedText.trim().split(/\s+/).length;
+    const elapsedTime = (Date.now() - startTime) / 1000;
+    const speed = Math.round((words / elapsedTime) * 60);
+    const accuracy = calculateAccuracy(randomQuote, typedText);
+
+    timeDisplay.textContent = `${elapsedTime.toFixed(1)}s`;
+    speedDisplay.textContent = `${speed} WPM`;
+    accuracyDisplay.textContent = `${accuracy}%`;
+
+    if (typedText === randomQuote) {
+        clearInterval(timer);
+        timer = null;
+    }
+}
+
+function calculateAccuracy(original, typed) {
+    const minLength = Math.min(original.length, typed.length);
+    let correct = 0;
+    for (let i = 0; i < minLength; i++) {
+        if (original[i] === typed[i]) {
+            correct++;
+        }
+    }
+    return ((correct / original.length) * 100).toFixed(2);
+}
