@@ -22,3 +22,14 @@ textarea {
 #result {
     margin-top: 20px;
 }
+span.correct {
+    color: green;
+    text-decoration:underline;
+
+}
+
+span.error {
+    color: red;
+    text-decoration:underline;
+    font-size: 18px;
+}

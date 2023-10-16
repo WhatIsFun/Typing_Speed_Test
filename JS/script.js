@@ -7,9 +7,9 @@ const accuracyDisplay = document.getElementById("accuracy");
 let timer;
 let startTime;
 let currentPosition = 0;
-const timeLimit = 10;
+const timeLimit = 20;
 
-
+// Quotes 
 const quotes = [
     "The only way to do great work is to love what you do.",
     "In three words I can sum up everything I've learned about life: it goes on.",
@@ -23,29 +23,25 @@ const quotes = [
     "The only limit to our realization of tomorrow will be our doubts of today.",
     "The best time to plant a tree was 20 years ago. The second best time is now.",
     "If you want to fly, you have to give up the things that weigh you down.",
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-
 ];
 
 // To select a a random quotes
-const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-quote.textContent = randomQuote;
+const getRandomQuote = () => quotes[Math.floor(Math.random() * quotes.length)];
 
-input.addEventListener("input", startTimer);
-
-function initializeQuote () {
+const initializeQuote = () => {
+    const randomQuote = getRandomQuote();
     quote.innerHTML = randomQuote.split('').map(char => `<span>${char}</span>`).join('');
-}
+};
+
 // Starting the timer
-function startTimer () {
+const startTimer = () => {
     if (!timer) {
         timer = setInterval(updateTimer, 1000);
         startTime = Date.now();
     }
+};
 
-    
-}
-function updateTimer () {
+const updateTimer = () => {
     const elapsedTime = (Date.now() - startTime) / 1000;
     const typedText = input.value;
     const speed = calculateSpeed(typedText, elapsedTime);
@@ -55,26 +51,25 @@ function updateTimer () {
     speedDisplay.textContent = `${speed} WPM`;
     accuracyDisplay.textContent = `${accuracy}%`;
     highlightCurrentCharacter(typedText);
-
-// By quote 
-    // if (typedText === quote.textContent) {
-    //     clearInterval(timer);
-    //     timer = null;
-    // }
-
-    // By specific time
-    if (elapsedTime >= timeLimit) {
+    // By quote
+    if (typedText === quote.textContent) {
         clearInterval(timer);
         timer = null;
-        input.setAttribute("disabled", "disabled");
     }
-}
-function calculateSpeed (typedText, elapsedTime){
+    // By specific time
+    // if (elapsedTime >= timeLimit) {
+    //     clearInterval(timer);
+    //     timer = null;
+    //     input.setAttribute("disabled", "disabled");
+    // }
+};
+
+const calculateSpeed = (typedText, elapsedTime) => {
     const words = typedText.trim().split(/\s+/).length;
     return Math.round((words / elapsedTime) * 60);
-}
+};
 
-function calculateAccuracy (original, typed) {
+const calculateAccuracy = (original, typed) => {
     const minLength = Math.min(original.length, typed.length);
     let correct = 0;
     for (let i = 0; i < minLength; i++) {
@@ -83,17 +78,20 @@ function calculateAccuracy (original, typed) {
         }
     }
     return ((correct / original.length) * 100).toFixed(2);
-}
-// Not working yet
-function highlightCurrentCharacter (typedText) {
+};
+
+
+const highlightCurrentCharacter = (typedText) => {
     const quoteChars = quote.querySelectorAll('span');
 
     quoteChars.forEach((char, index) => {
         if (index < typedText.length) {
             if (typedText[index] === char.textContent) {
                 char.classList.add('correct');
+                char.classList.remove('error');
             } else {
                 char.classList.add('error');
+                char.classList.remove('correct');
             }
         } else {
             char.classList.remove('correct', 'error');
@@ -101,7 +99,7 @@ function highlightCurrentCharacter (typedText) {
     });
 
     currentPosition = typedText.length;
-}
+};
 
 input.addEventListener("input", startTimer);
 
