@@ -8,48 +8,29 @@ let timer;
 let startTime;
 let currentPosition = 0;
 const timeLimit = 20;
-let category = 'happiness';
 
 // Quotes 
-// const quotes = [
-//     "The only way to do great work is to love what you do.",
-//     "In three words I can sum up everything I've learned about life: it goes on.",
-//     "Don't watch the clock; do what it does. Keep going.",
-//     "The journey of a thousand miles begins with one step.",
-//     "Success is not final, failure is not fatal: It is the courage to continue that counts.",
-//     "Life is what happens when you're busy making other plans.",
-//     "It does not matter how slowly you go as long as you do not stop.",
-//     "The future belongs to those who believe in the beauty of their dreams.",
-//     "You miss 100% of the shots you don't take.",
-//     "The only limit to our realization of tomorrow will be our doubts of today.",
-//     "The best time to plant a tree was 20 years ago. The second best time is now.",
-//     "If you want to fly, you have to give up the things that weigh you down.",
-// ];
-
-// This API to get random quotes 
-const getRandomQuote = () => {
-    $.ajax({
-        method: 'GET',
-        url: 'https://api.api-ninjas.com/v1/quotes?category=' + category,
-        headers: { 'X-Api-Key': 'Q1IRiPj5wYNcFg+s0vbxAw==xlq1N2UTBNeyYhSx'},
-        contentType: 'application/json',
-        success: function(result) {
-            const quoteStatement = result[0].quote;
-            quote.textContent = quoteStatement;
-        },
-        error: function ajaxError(jqXHR) {
-            console.error('Error: ', jqXHR.responseText);
-        }
-    });
-};
+const quotes = [
+    "The only way to do great work is to love what you do.",
+    "In three words I can sum up everything I've learned about life: it goes on.",
+    "Don't watch the clock; do what it does. Keep going.",
+    "The journey of a thousand miles begins with one step.",
+    "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+    "Life is what happens when you're busy making other plans.",
+    "It does not matter how slowly you go as long as you do not stop.",
+    "The future belongs to those who believe in the beauty of their dreams.",
+    "You miss 100% of the shots you don't take.",
+    "The only limit to our realization of tomorrow will be our doubts of today.",
+    "The best time to plant a tree was 20 years ago. The second best time is now.",
+    "If you want to fly, you have to give up the things that weigh you down.",
+];
 
 // To select a a random quotes
-//const getRandomQuote = () => quotes[Math.floor(Math.random() * quotes.length)];
+const getRandomQuote = () => quotes[Math.floor(Math.random() * quotes.length)];
 
 const initializeQuote = () => {
-    //const randomQuote = getRandomQuote();
+    const randomQuote = getRandomQuote();
     quote.innerHTML = randomQuote.split('').map(char => `<span>${char}</span>`).join('');
-    getRandomQuote();
 };
 
 // Starting the timer
@@ -74,7 +55,15 @@ const updateTimer = () => {
     if (typedText === quote.textContent) {
         clearInterval(timer);
         timer = null;
+        input.setAttribute("disabled", "disabled");
     }
+    // To stop the timer when typedText.;ength e
+    if (typedText.length === quote.textContent.length) {
+        clearInterval(timer);
+        timer = null;
+        input.setAttribute("disabled", "disabled"); // Disable the input
+    }
+    input.addEventListener("input", updateTimer);
     // By specific time
     // if (elapsedTime >= timeLimit) {
     //     clearInterval(timer);
@@ -122,5 +111,4 @@ const highlightCurrentCharacter = (typedText) => {
 
 input.addEventListener("input", startTimer);
 
-getRandomQuote();
-//initializeQuote();
+initializeQuote();
