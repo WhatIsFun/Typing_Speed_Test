@@ -1,4 +1,6 @@
 const quote = document.getElementById("quote");
+quote.innerHTML = "Please Wait, Loading ..."
+
 const input = document.getElementById("input");
 const timeDisplay = document.getElementById("time");
 const speedDisplay = document.getElementById("speed");
@@ -9,29 +11,53 @@ let startTime;
 let currentPosition = 0;
 const timeLimit = 20;
 
+
 // Quotes 
-const quotes = [
-    "The only way to do great work is to love what you do.",
-    "In three words I can sum up everything I've learned about life: it goes on.",
-    "Don't watch the clock; do what it does. Keep going.",
-    "The journey of a thousand miles begins with one step.",
-    "Success is not final, failure is not fatal: It is the courage to continue that counts.",
-    "Life is what happens when you're busy making other plans.",
-    "It does not matter how slowly you go as long as you do not stop.",
-    "The future belongs to those who believe in the beauty of their dreams.",
-    "You miss 100% of the shots you don't take.",
-    "The only limit to our realization of tomorrow will be our doubts of today.",
-    "The best time to plant a tree was 20 years ago. The second best time is now.",
-    "If you want to fly, you have to give up the things that weigh you down.",
-];
+// const quotes = [
+//     "The only way to do great work is to love what you do.",
+//     "In three words I can sum up everything I've learned about life: it goes on.",
+//     "Don't watch the clock; do what it does. Keep going.",
+//     "The journey of a thousand miles begins with one step.",
+//     "Success is not final, failure is not fatal: It is the courage to continue that counts.",
+//     "Life is what happens when you're busy making other plans.",
+//     "It does not matter how slowly you go as long as you do not stop.",
+//     "The future belongs to those who believe in the beauty of their dreams.",
+//     "You miss 100% of the shots you don't take.",
+//     "The only limit to our realization of tomorrow will be our doubts of today.",
+//     "The best time to plant a tree was 20 years ago. The second best time is now.",
+//     "If you want to fly, you have to give up the things that weigh you down.",
+// ];
+
+// Quote API
+var myHeaders = new Headers();
+myHeaders.append("x-api-key", "Q1IRiPj5wYNcFg+s0vbxAw==xlq1N2UTBNeyYhSx");
+
+var requestOptions = {
+  method: 'GET',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+const initializeQuote = (currQuote) => {
+    //const randomQuote = getRandomQuote();
+    quote.innerHTML = currQuote.split('').map(char => `<span>${char}</span>`).join('');
+};
+
+fetch("https://api.api-ninjas.com/v1/quotes?category=happiness", requestOptions)
+  .then(response => response.json()) // Use response.json() to parse the JSON response
+  .then(data => {
+    // Extract the quote from the data
+    quote.textContent = data[0].quote;
+    console.log(quote.textContent);
+    initializeQuote(quote.textContent);
+  })
+  .catch(error => console.log('error', error));
+
 
 // To select a a random quotes
-const getRandomQuote = () => quotes[Math.floor(Math.random() * quotes.length)];
+//const getRandomQuote = () => quotes[Math.floor(Math.random() * quotes.length)];
 
-const initializeQuote = () => {
-    const randomQuote = getRandomQuote();
-    quote.innerHTML = randomQuote.split('').map(char => `<span>${char}</span>`).join('');
-};
+
 
 // Starting the timer
 const startTimer = () => {
@@ -111,4 +137,4 @@ const highlightCurrentCharacter = (typedText) => {
 
 input.addEventListener("input", startTimer);
 
-initializeQuote();
+// initializeQuote();
