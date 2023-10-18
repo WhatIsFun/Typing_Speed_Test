@@ -97,12 +97,12 @@ const updateTimer = () => {
     //     input.setAttribute("disabled", "disabled");
     // }
 };
-
+// Calculate the typing speed
 const calculateSpeed = (typedText, elapsedTime) => {
     const words = typedText.trim().split(/\s+/).length;
     return Math.round((words / elapsedTime) * 60);
 };
-
+// Calculate the accuracy
 const calculateAccuracy = (original, typed) => {
     const minLength = Math.min(original.length, typed.length);
     let correct = 0;
@@ -114,7 +114,7 @@ const calculateAccuracy = (original, typed) => {
     return ((correct / original.length) * 100).toFixed(2);
 };
 
-
+// highlight the character
 const highlightCurrentCharacter = (typedText) => {
     const quoteChars = quote.querySelectorAll('span');
 
