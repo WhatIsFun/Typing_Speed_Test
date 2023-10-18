@@ -7,3 +7,7 @@ Dynamic character highlighting to indicate typing correctness.
 A timer to track how long it takes to complete the quote.
 A user-friendly interface for an engaging typing experience.
 This application is perfect for individuals who want to practice touch typing or improve their typing skills in a fun and interactive way.
+<<<<<<< HEAD
+=======
+
+>>>>>>> cc68d34549298e71ce1b49485de8100c88520ab2
